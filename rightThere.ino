@@ -7,6 +7,7 @@
 #define ECHO_PIN     9
 #define MAX_DISTANCE 500
 
+boolean seenRed = false;
 int huns, tens, ones, distance, returnbyte, sonar_data, i;
 unsigned long time_start;
 
@@ -14,6 +15,12 @@ void wake_up() {
 }
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+
+void showGreenLED();
+
+void showYellowLED();
+
+void showRedLED();
 
 void turnOffLEDs() {
     digitalWrite(GreenLEDPin, LOW);
@@ -26,7 +33,7 @@ void setup() {
     pinMode(GreenLEDPin, OUTPUT);
     pinMode(RedLEDPin, OUTPUT);
     pinMode(YellowLEDPin, OUTPUT);
- //   turnOffLEDs();
+    //   turnOffLEDs();
 }
 
 void cycleGreenToRed(int delaySeconds) {
@@ -57,20 +64,14 @@ void loop() {
     Serial.print(distance);
     Serial.println(" in");
 
-    if (distance > 36) {
-        digitalWrite(GreenLEDPin, HIGH);
-        digitalWrite(RedLEDPin, LOW);
-        digitalWrite(YellowLEDPin, LOW);
+    if (distance > 40) {
+        showGreenLED();
     }
-    else if (distance > 12 && distance <= 36) {
-        digitalWrite(GreenLEDPin, LOW);
-        digitalWrite(RedLEDPin, LOW);
-        digitalWrite(YellowLEDPin, HIGH);
+    else if (distance > 24 && distance <= 40) {
+        showYellowLED();
     }
-    else if (distance <= 12  && distance > 0) {
-        digitalWrite(RedLEDPin, HIGH);
-        digitalWrite(YellowLEDPin, LOW);
-        digitalWrite(GreenLEDPin, LOW);
+    else if (distance <= 24  && distance > 0) {
+        showRedLED();
         delay(1000);
         cycleGreenToRed(50);
     }
@@ -82,5 +83,23 @@ void loop() {
 //        turnOffLEDs();
 //        go_to_sleep();
 //    }
+}
+
+void showRedLED() {
+    digitalWrite(RedLEDPin, HIGH);
+    digitalWrite(YellowLEDPin, LOW);
+    digitalWrite(GreenLEDPin, LOW);
+}
+
+void showYellowLED() {
+    digitalWrite(GreenLEDPin, LOW);
+    digitalWrite(RedLEDPin, LOW);
+    digitalWrite(YellowLEDPin, HIGH);
+}
+
+void showGreenLED() {
+    digitalWrite(GreenLEDPin, HIGH);
+    digitalWrite(RedLEDPin, LOW);
+    digitalWrite(YellowLEDPin, LOW);
 }
 
