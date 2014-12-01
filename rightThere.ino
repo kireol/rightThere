@@ -7,6 +7,11 @@
 #define ECHO_PIN     9
 #define MAX_DISTANCE 500
 
+
+#define GREEN_MIN_DISTANCE 40
+#define YELLOW_MIN_DISTANCE 30
+#define RED_MIN_DISTANCE 20
+
 boolean seenRed = false;
 int huns, tens, ones, distance, returnbyte, sonar_data, i;
 unsigned long time_start;
@@ -21,6 +26,8 @@ void showGreenLED();
 void showYellowLED();
 
 void showRedLED();
+
+void sleepModeHandler();
 
 void turnOffLEDs() {
     digitalWrite(GreenLEDPin, LOW);
@@ -51,7 +58,7 @@ void cycleGreenToRed(int delaySeconds) {
 
 void go_to_sleep() {
     delay(10000);
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 1; i++) {
         cycleGreenToRed(50);
     }
     time_start = millis();
@@ -64,25 +71,32 @@ void loop() {
     Serial.print(distance);
     Serial.println(" in");
 
-    if (distance > 40) {
+    if (distance > GREEN_MIN_DISTANCE) {
+        seenRed = false;
         showGreenLED();
     }
-    else if (distance > 24 && distance <= 40) {
+    else if (distance > YELLOW_MIN_DISTANCE && distance <= GREEN_MIN_DISTANCE) {
+        seenRed = false;
         showYellowLED();
     }
-    else if (distance <= 24  && distance > 0) {
+    else if (distance <= YELLOW_MIN_DISTANCE && distance >= RED_MIN_DISTANCE) {
         showRedLED();
-        delay(1000);
+    }
+    else if (distance < RED_MIN_DISTANCE && distance > 0) {
         cycleGreenToRed(50);
     }
 
-//    if (millis() - time_start < 0) // means we had a roll over since time_start is greater than millis
-//        time_start = 0;
-//
-//    if (millis() - time_start > 60000) {
-//        turnOffLEDs();
-//        go_to_sleep();
-//    }
+    //sleepModeHandler();
+}
+
+void sleepModeHandler() {
+    if (millis() - time_start < 0) // means we had a roll over since time_start is greater than millis
+        time_start = 0;
+
+    if (millis() - time_start > 60000) {
+        turnOffLEDs();
+        go_to_sleep();
+    }
 }
 
 void showRedLED() {
