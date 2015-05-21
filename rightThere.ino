@@ -3,13 +3,13 @@
 #define RedLEDPin 4
 #define YellowLEDPin 6
 #define GreenLEDPin 8
-#define TRIGGER_PIN  12
-#define ECHO_PIN     9
+#define TRIGGER_PIN  13
+#define ECHO_PIN     11
 
 //inches for minimum threshold
-#define GREEN_MIN_DISTANCE 40
-#define YELLOW_MIN_DISTANCE 30
-#define RED_MIN_DISTANCE 20
+#define GREEN_MIN_DISTANCE 96
+#define YELLOW_MIN_DISTANCE 48
+#define RED_MIN_DISTANCE 29
 
 #define MAX_DISTANCE 200
 
