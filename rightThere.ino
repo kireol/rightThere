@@ -7,7 +7,7 @@
 #define ECHO_PIN     11
 
 //inches for minimum threshold
-#define GREEN_MIN_DISTANCE 96
+#define GREEN_MIN_DISTANCE 76
 #define YELLOW_MIN_DISTANCE 48
 #define RED_MIN_DISTANCE 29
 
@@ -35,25 +35,31 @@ void setup() {
 void loop() {
     delay(50);
     unsigned int distance = sonar.ping() / 100;
+    turnOffLEDs();
 //    Serial.print("Ping: ");
 //    Serial.print(distance);
 //    Serial.println(" in");
-
+    unsigned int GREEN_TIME_MULTIPLIER = 300 / (MAX_DISTANCE - GREEN_MIN_DISTANCE);
+    unsigned int YELLOW_TIME_MULTIPLIER = 300 / (GREEN_MIN_DISTANCE - YELLOW_MIN_DISTANCE);
+    unsigned int RED_TIME_MULTIPLIER = 500 / (YELLOW_MIN_DISTANCE - RED_MIN_DISTANCE);
+    
     if (distance > GREEN_MIN_DISTANCE) {
         seenRed = false;
+        delay( (distance - GREEN_MIN_DISTANCE) * GREEN_TIME_MULTIPLIER);
         showGreenLED();
     }
     else if (distance > YELLOW_MIN_DISTANCE && distance <= GREEN_MIN_DISTANCE) {
         seenRed = false;
+        delay( (distance - YELLOW_MIN_DISTANCE) * YELLOW_TIME_MULTIPLIER);
         showYellowLED();
     }
     else if (distance <= YELLOW_MIN_DISTANCE && distance >= RED_MIN_DISTANCE) {
+        delay( (distance - RED_MIN_DISTANCE) * RED_TIME_MULTIPLIER);
         showRedLED();
     }
     else if (distance < RED_MIN_DISTANCE && distance > 0) {
         cycleGreenToRed(50);
     }
-
     sleepModeHandler();
 }
 
@@ -97,6 +103,8 @@ void sleepModeHandler() {
         go_to_sleep();
     }
 }
+
+
 
 void showRedLED() {
     digitalWrite(RedLEDPin, HIGH);
