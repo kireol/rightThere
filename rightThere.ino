@@ -17,7 +17,7 @@ boolean seenRed = false;
 int huns, tens, ones, distance, sonar_data, i;
 unsigned long time_start;
 
-NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
 
 void showGreenLED();
 void showYellowLED();
