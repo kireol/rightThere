@@ -1,12 +1,13 @@
 #include <NewPing.h>
 
-#define RedLEDPin 4
-#define YellowLEDPin 6
-#define GreenLEDPin 8
-#define TRIGGER_PIN  13
-#define ECHO_PIN     11
+#define RedLEDPin     4
+#define YellowLEDPin  6
+#define GreenLEDPin   8
+#define TRIGGER_PIN   13
+#define ECHO_PIN      11
+#define POT_PIN       A0 
 
-#define MAX_DISTANCE 300
+#define MAX_DISTANCE  300
 
 //inches for minimum threshold
 int RED_MIN_DISTANCE;
@@ -40,14 +41,10 @@ void setup() {
 }
 
 void loop() {
-    int sensorValue = analogRead(A0);
 
     unsigned int distance = sonar.ping() / 100;
     turnOffLEDs();
-//    Serial.print("Ping: ");
-//    Serial.print(distance);
-//    Serial.println(" in");
-    int potentiometerDistance = analogRead(A0) / 10;
+    int potentiometerDistance = analogRead(POT_PIN) / 20;
     setDistances(potentiometerDistance);
 
     unsigned int GREEN_TIME_MULTIPLIER = 300 / (MAX_DISTANCE - GREEN_MIN_DISTANCE);
